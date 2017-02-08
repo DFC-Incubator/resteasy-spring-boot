@@ -3,70 +3,29 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.paypal.springboot</groupId>
+    <parent>
+		<groupId>org.irods</groupId>
+		<artifactId>jargon-pom</artifactId>
+		<version>4.1.10.0-SNAPSHOT</version>
+	</parent>
+
+    <groupId>org.irods.jargon.springboot</groupId>
     <artifactId>resteasy-spring-boot-starter</artifactId>
-    <version>2.2.2-RELEASE</version>
-    <name>${project.artifactId}</name>
-
-    <description>A Spring Boot starter for RESTEasy</description>
-    <url>https://github.com/paypal/resteasy-spring-boot</url>
-
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <name>Fabio Carvalho</name>
-            <email>facarvalho@paypal.com</email>
-            <organization>PayPal</organization>
-            <organizationUrl>http://www.paypal.com</organizationUrl>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git:git@github.com:paypal/resteasy-spring-boot.git</connection>
-        <developerConnection>scm:git:git@github.com:paypal/resteasy-spring-boot.git</developerConnection>
-        <url>git@github.com:paypal/resteasy-spring-boot.git</url>
-    </scm>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
-    <properties>
-        <springboot.version>1.4.2.RELEASE</springboot.version>
-        <resteasy.version>3.0.19.Final</resteasy.version>
-        <coverage.line>80</coverage.line>
-        <coverage.branch>80</coverage.branch>
-    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>${springboot.version}</version>
+            <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${springboot.version}</version>
+            <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxrs</artifactId>
-            <version>${resteasy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>async-http-servlet-3.0</artifactId>
             <version>${resteasy.version}</version>
         </dependency>
         <dependency>
@@ -93,7 +52,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
@@ -103,7 +61,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.1.0.RELEASE</version>
+            <version>${spring.core.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -115,8 +73,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -189,82 +145,13 @@
     <build>
         <pluginManagement>
             <plugins>
-                <!-- Added for Fortify Support -->
-                <plugin>
-                    <groupId>com.fortify.ps.maven.plugin</groupId>
-                    <artifactId>sca-maven-plugin</artifactId>
-                    <configuration>
-                        <source>1.8</source>
-                        <maxHeap>1G</maxHeap>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>sca-clean</id>
-                            <goals>
-                                <goal>clean</goal>
-                            </goals>
-                        </execution>
-                        <execution>
-                            <id>sca-translate-exec</id>
-                            <goals>
-                                <goal>translate</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <version>4.22</version>
-                </plugin>
-                <!-- End Added For Fortify Support -->
+           
             </plugins>
         </pluginManagement>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <check>
-                        <lineRate>${coverage.line}</lineRate>
-                        <packageLineRate>${coverage.line}</packageLineRate>
-                        <totalLineRate>${coverage.line}</totalLineRate>
-                        <branchRate>${coverage.branch}</branchRate>
-                        <packageBranchRate>${coverage.branch}</packageBranchRate>
-                        <totalBranchRate>${coverage.branch}</totalBranchRate>
-                        <haltOnFailure>true</haltOnFailure>
-                        <regexes>
-                            <regex>
-                                <pattern>com.paypal.springboot.resteasy.JaxrsApplicationScanner</pattern>
-                                <lineRate>80</lineRate>
-                                <branchRate>65</branchRate>
-                            </regex>
-                        </regexes>
-                    </check>
-                    <formats>
-                        <format>html</format>
-                        <format>xml</format>
-                    </formats>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>clean</goal>
-                            <goal>cobertura</goal>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+       
         </plugins>
    </build>
 
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-        </plugins>
-    </reporting>
 
 </project>
